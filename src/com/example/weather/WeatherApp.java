@@ -53,7 +53,7 @@ final class WeatherController {
 
         weatherLogger.log(location);
 
-        Weather weather = provider.checkWeatherAndSendMailWithTemperature(location);
+        Weather weather = provider.getWeatherFrom(location);
 
         mailProvider.sendMail(weather);
 
@@ -83,7 +83,7 @@ class WeatherProviderUtilsCommonHelper {
     private WeatherConnector weatherConnector;
 
 
-    public Weather checkWeatherAndSendMailWithTemperature(String location) {
+    public Weather getWeatherFrom(String location) {
 
         try {
             String[] weatherData = weatherConnector.weather(location);
