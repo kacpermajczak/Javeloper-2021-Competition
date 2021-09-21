@@ -21,7 +21,7 @@ public class WeatherApp {
 
     public static void main(String[] args) throws InterruptedException {
         Runnable task = () -> {
-            WeatherController weatherController = new WeatherController(new WeatherLoggerUsingSystem(), mailProvider);
+            WeatherController weatherController = new WeatherController(new WeatherLoggerUsingSystem(), new MailProviderUsingMailer());
 
             weatherController.execute(locations);
         };
@@ -68,6 +68,14 @@ final class WeatherLoggerUsingSystem implements WeatherLogger {
 
     public void log(String text) {
         System.out.println("Weather=" + text);
+    }
+}
+
+final class MailProviderUsingMailer implements MailProvider {
+
+    @Override
+    public void sendMail(Weather weather) {
+        //todo
     }
 }
 

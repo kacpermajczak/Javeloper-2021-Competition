@@ -8,10 +8,12 @@ class WeatherControllerTest {
 
     private WeatherController weatherController;
     private WeatherLoggerSpy weatherLogger;
+    private MailProviderSpy mailProvider;
 
     @BeforeEach
     void setUp() {
         this.weatherLogger = new WeatherLoggerSpy();
+        this.mailProvider = new MailProviderSpy();
         this.weatherController = new WeatherController(weatherLogger, mailProvider);
     }
 
@@ -19,5 +21,6 @@ class WeatherControllerTest {
     void execute() {
         weatherController.execute(new String[]{"Cracow", "Warsaw", "London", "Lodz", "Kielce", "Tokyo", "NewYork", "Buenos Aires", "Rzeszow"});
         Assertions.assertEquals(2, weatherLogger.getCounter());
+        Assertions.assertEquals(1, mailProvider.getCounter());
     }
 }
