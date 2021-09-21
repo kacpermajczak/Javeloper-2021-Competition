@@ -21,7 +21,13 @@ class WeatherControllerTest {
 
     @Test
     void execute() {
-        weatherController.execute(new String[]{"Cracow", "Warsaw", "London", "Lodz", "Kielce", "Tokyo", "NewYork", "Buenos Aires", "Rzeszow"});
+        //Given
+        String[] locations = {"Cracow", "Warsaw", "London", "Lodz", "Kielce", "Tokyo", "NewYork", "Buenos Aires", "Rzeszow"};
+
+        //When
+        weatherController.execute(locations);
+
+        //Then
         Assertions.assertEquals(2, weatherLogger.getCounter());
         Assertions.assertEquals(1, mailProvider.getCounter());
     }
