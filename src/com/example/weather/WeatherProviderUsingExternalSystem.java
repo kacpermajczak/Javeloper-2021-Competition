@@ -7,22 +7,13 @@ final class WeatherProviderUsingExternalSystem implements WeatherProvider {
         this.weatherConnector = weatherConnector;
     }
 
-    public Weather getWeatherFrom(String location) {
+    public Weather getWeatherFrom(String location) throws CannotFindWeather {
         try {
             String[] weatherData = weatherConnector.weather(location);
 
             return new Weather(location, weatherData[0], Double.parseDouble(weatherData[1]));
         } catch (Exception e) {
-            log(e);
-            return null;
+            throw CannotFindWeather.forLocation(location);
         }
-    }
-
-    private static void log(Object object) {
-        System.out.println("Weather=" + object.toString());
-    }
-
-    private static void log(String text) {
-        System.out.println("Weather=" + text);
     }
 }
