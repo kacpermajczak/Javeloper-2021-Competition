@@ -15,8 +15,7 @@ final class WeatherController {
     }
 
     public void execute(String[] locations) {
-        Random random = new Random();
-        int randomNumber = getRandomNumber(locations, random);
+        int randomNumber = getRandomNumber(locations);
 
         String location = locations[randomNumber];
 
@@ -36,7 +35,9 @@ final class WeatherController {
         weatherLogger.log(weather);
     }
 
-    private int getRandomNumber(String[] locations, Random random) {
+    private int getRandomNumber(String[] locations) {
+        Random random = new Random();
+
         OptionalInt randomNumber = random.ints(0, locations.length)
                 .findFirst();
 
