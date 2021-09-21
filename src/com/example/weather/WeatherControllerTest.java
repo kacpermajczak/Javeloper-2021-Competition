@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class WeatherControllerTest {
 
     private WeatherController weatherController;
@@ -14,7 +12,7 @@ class WeatherControllerTest {
     @BeforeEach
     void setUp() {
         this.weatherLogger = new WeatherLoggerSpy();
-        this.weatherController = new WeatherController(weatherLogger);
+        this.weatherController = new WeatherController(weatherLogger, mailProvider);
     }
 
     @Test

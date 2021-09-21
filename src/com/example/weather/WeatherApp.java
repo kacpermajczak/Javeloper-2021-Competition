@@ -5,8 +5,9 @@ import java.util.Random;
 interface WeatherConnector {
     String[] weather(String location);
 }
+
 interface MailProvider {
-    void sendMail(final String location, final String weatherDatum, final String datum);
+    void sendMail(Weather weather);
 }
 
 interface WeatherLogger {
@@ -20,7 +21,7 @@ public class WeatherApp {
 
     public static void main(String[] args) throws InterruptedException {
         Runnable task = () -> {
-            WeatherController weatherController = new WeatherController(new WeatherLoggerUsingSystem());
+            WeatherController weatherController = new WeatherController(new WeatherLoggerUsingSystem(), mailProvider);
 
             weatherController.execute(locations);
         };
@@ -33,9 +34,11 @@ public class WeatherApp {
 
 final class WeatherController {
     private final WeatherLogger weatherLogger;
+    private final MailProvider mailProvider;
 
-    public WeatherController(WeatherLogger weatherLogger) {
+    public WeatherController(WeatherLogger weatherLogger, MailProvider mailProvider) {
         this.weatherLogger = weatherLogger;
+        this.mailProvider = mailProvider;
     }
 
     public void execute(String[] locations) {
@@ -51,6 +54,8 @@ final class WeatherController {
         weatherLogger.log(location);
 
         Weather weather = provider.checkWeatherAndSendMailWithTemperature(location);
+
+        mailProvider.sendMail(weather);
 
         weatherLogger.log(weather);
     }
@@ -68,18 +73,14 @@ final class WeatherLoggerUsingSystem implements WeatherLogger {
 
 class WeatherProviderUtilsCommonHelper {
     private WeatherConnector weatherConnector;
-    private MailProvider mailProvider;
+
 
     public Weather checkWeatherAndSendMailWithTemperature(String location) {
 
         try {
             String[] weatherData = weatherConnector.weather(location);
 
-            Weather weather = new Weather(weatherData[0], Double.valueOf(weatherData[1]));
-
-            mailProvider.sendMail(location, weatherData[0], weatherData[1]);
-
-            return weather;
+            return new Weather(location, weatherData[0], Double.parseDouble(weatherData[1]));
         } catch (Exception e) {
             log(e);
             return null;
@@ -99,11 +100,24 @@ class WeatherProviderUtilsCommonHelper {
     }
 }
 
-class Weather {
-    private String location;
-    private double temp;
+final class Weather {
+    private final String location;
+    private final String weatherDatum;
+    private final double temperature;
 
-    public Weather(String weatherDatum, Double valueOf) {
+    public Weather(final String location, final String weatherDatum, final double temp)
+    {
+        this.location = location;
+        this.weatherDatum = weatherDatum;
+        this.temperature = temp;
+    }
 
+    @Override
+    public String toString() {
+        return "Weather{" +
+                "location='" + location + '\'' +
+                ", weatherDatum='" + weatherDatum + '\'' +
+                ", temperature=" + temperature +
+                '}';
     }
 }
