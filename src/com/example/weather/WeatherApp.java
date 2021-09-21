@@ -1,7 +1,5 @@
 package com.example.weather;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 interface WeatherConnector {
@@ -47,7 +45,6 @@ public class WeatherApp {
 class WeatherProviderUtilsCommonHelper {
     private WeatherConnector weatherConnector;
     private MailProvider mailProvider;
-    private Map<String, Weather> cacheWeather = new HashMap<>();
 
     public Weather checkWeatherAndSendMailWithTemperature(String location) {
 
@@ -55,8 +52,6 @@ class WeatherProviderUtilsCommonHelper {
             String[] weatherData = weatherConnector.weather(location);
 
             Weather weather = new Weather(weatherData[0], Double.valueOf(weatherData[1]));
-
-            cacheWeather.put(location, weather);
 
             mailProvider.sendMail(location, weatherData[0], weatherData[1]);
 
