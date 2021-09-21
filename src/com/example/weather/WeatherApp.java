@@ -83,4 +83,8 @@ class WeatherProviderUtilsCommonHelper {
 class Weather {
     private String location;
     private double temp;
+
+    public Weather(String weatherDatum, Double valueOf) {
+
+    }
 }
