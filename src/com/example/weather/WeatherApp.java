@@ -80,8 +80,11 @@ final class MailProviderUsingMailer implements MailProvider {
 }
 
 class WeatherProviderUtilsCommonHelper {
-    private WeatherConnector weatherConnector;
+    private final WeatherConnector weatherConnector;
 
+    public WeatherProviderUtilsCommonHelper(WeatherConnector weatherConnector) {
+        this.weatherConnector = weatherConnector;
+    }
 
     public Weather getWeatherFrom(String location) {
 
@@ -93,10 +96,6 @@ class WeatherProviderUtilsCommonHelper {
             log(e);
             return null;
         }
-    }
-
-    public void setWeatherConnector(WeatherConnector connector) {
-        this.weatherConnector = connector;
     }
 
     private static void log(Object object) {
