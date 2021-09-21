@@ -1,6 +1,6 @@
 package com.example.weather;
 
-public class MailProviderSpy implements MailProvider{
+public class MailProviderSpy implements MailProvider {
 
     int counter = 0;
 
