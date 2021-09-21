@@ -10,6 +10,10 @@ interface MailProvider {
     void sendMail(Weather weather);
 }
 
+interface WeatherProvider {
+    Weather getWeatherFrom(String location);
+}
+
 interface WeatherLogger {
     void log(Object object);
     void log(String text);
@@ -21,12 +25,12 @@ public class WeatherApp {
 
     public static void main(String[] args) throws InterruptedException {
         Runnable task = () -> {
-            WeatherController weatherController = new WeatherController(new WeatherLoggerUsingSystem(), new MailProviderUsingMailer());
+            WeatherController weatherController = new WeatherController(new WeatherLoggerUsingSystem(), new MailProviderUsingMailer(), new WeatherProviderUsingExternalSystem());
 
             weatherController.execute(locations);
         };
 
-        for (int i = 0; i < locations.length * 20 ; i++) {
+        for (int i = 0; i < locations.length * 20; i++) {
             new Thread(task).join();
         }
     }
@@ -35,7 +39,7 @@ public class WeatherApp {
 final class WeatherController {
     private final WeatherLogger weatherLogger;
     private final MailProvider mailProvider;
-    private WeatherProvider weatherProvider;
+    private final WeatherProvider weatherProvider;
 
     public WeatherController(WeatherLogger weatherLogger, MailProvider mailProvider, WeatherProvider weatherProvider) {
         this.weatherLogger = weatherLogger;
@@ -79,15 +83,16 @@ final class MailProviderUsingMailer implements MailProvider {
     }
 }
 
-class WeatherProvider {
+final class WeatherProviderUsingExternalSystem implements WeatherProvider {
     private final WeatherConnector weatherConnector;
 
-    public WeatherProvider(WeatherConnector weatherConnector) {
+    public WeatherProviderUsingExternalSystem(
+            WeatherConnector weatherConnector
+    ) {
         this.weatherConnector = weatherConnector;
     }
 
     public Weather getWeatherFrom(String location) {
-
         try {
             String[] weatherData = weatherConnector.weather(location);
 
@@ -112,8 +117,7 @@ final class Weather {
     private final String weatherDatum;
     private final double temperature;
 
-    public Weather(final String location, final String weatherDatum, final double temp)
-    {
+    public Weather(final String location, final String weatherDatum, final double temp) {
         this.location = location;
         this.weatherDatum = weatherDatum;
         this.temperature = temp;
