@@ -42,7 +42,7 @@ final class WeatherController {
     }
 
     public void execute(String[] locations) {
-        WeatherProviderUtilsCommonHelper provider = new WeatherProviderUtilsCommonHelper();
+        WeatherProvider provider = new WeatherProvider();
 
         Random random = new Random();
         int randomNumber = random.ints(0, locations.length)
@@ -79,10 +79,10 @@ final class MailProviderUsingMailer implements MailProvider {
     }
 }
 
-class WeatherProviderUtilsCommonHelper {
+class WeatherProvider {
     private final WeatherConnector weatherConnector;
 
-    public WeatherProviderUtilsCommonHelper(WeatherConnector weatherConnector) {
+    public WeatherProvider(WeatherConnector weatherConnector) {
         this.weatherConnector = weatherConnector;
     }
 
