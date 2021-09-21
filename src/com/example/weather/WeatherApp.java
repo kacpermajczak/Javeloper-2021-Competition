@@ -16,6 +16,7 @@ interface WeatherProvider {
 
 interface WeatherLogger {
     void log(Object object);
+
     void log(String text);
 }
 
@@ -25,7 +26,7 @@ public class WeatherApp {
 
     public static void main(String[] args) throws InterruptedException {
         Runnable task = () -> {
-            WeatherController weatherController = new WeatherController(new WeatherLoggerUsingSystem(), new MailProviderUsingMailer(), new WeatherProviderUsingExternalSystem());
+            WeatherController weatherController = new WeatherController(new WeatherLoggerUsingSystem(), new MailProviderUsingMailer(), new WeatherProviderUsingExternalSystem(new WeatherConnectorUsingExternalSystem()));
 
             weatherController.execute(locations);
         };
@@ -86,9 +87,7 @@ final class MailProviderUsingMailer implements MailProvider {
 final class WeatherProviderUsingExternalSystem implements WeatherProvider {
     private final WeatherConnector weatherConnector;
 
-    public WeatherProviderUsingExternalSystem(
-            WeatherConnector weatherConnector
-    ) {
+    public WeatherProviderUsingExternalSystem(WeatherConnector weatherConnector) {
         this.weatherConnector = weatherConnector;
     }
 
@@ -109,6 +108,15 @@ final class WeatherProviderUsingExternalSystem implements WeatherProvider {
 
     private static void log(String text) {
         System.out.println("Weather=" + text);
+    }
+}
+
+final class WeatherConnectorUsingExternalSystem implements WeatherConnector {
+
+    @Override
+    public String[] weather(String location) {
+        //todo - initialize connection with external service
+        return new String[]{"todo", "todo"};
     }
 }
 

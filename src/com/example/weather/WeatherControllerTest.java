@@ -9,12 +9,14 @@ class WeatherControllerTest {
     private WeatherController weatherController;
     private WeatherLoggerSpy weatherLogger;
     private MailProviderSpy mailProvider;
+    private WeatherProviderFake weatherProvider;
 
     @BeforeEach
     void setUp() {
         this.weatherLogger = new WeatherLoggerSpy();
         this.mailProvider = new MailProviderSpy();
-        this.weatherController = new WeatherController(weatherLogger, mailProvider);
+        this.weatherProvider = new WeatherProviderFake();
+        this.weatherController = new WeatherController(weatherLogger, mailProvider, weatherProvider);
     }
 
     @Test
