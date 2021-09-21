@@ -45,7 +45,11 @@ final class WeatherController {
         WeatherProviderUtilsCommonHelper provider = new WeatherProviderUtilsCommonHelper();
 
         Random random = new Random();
-        String location = locations[random.nextInt()];
+        int randomNumber = random.ints(0, locations.length)
+                .findFirst()
+                .getAsInt();
+
+        String location = locations[randomNumber];
 
         weatherLogger.log(location);
 
