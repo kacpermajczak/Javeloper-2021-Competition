@@ -19,9 +19,6 @@ public class WeatherApp {
     static final String[] locations = new String[]{"Cracow", "Warsaw", "London", "Lodz", "Kielce", "Tokyo", "NewYork", "Buenos Aires", "Rzeszow"};
 
     public static void main(String[] args) throws InterruptedException {
-
-        Random random = new Random();
-
         Runnable task = () -> {
             WeatherController weatherController = new WeatherController(new WeatherLoggerUsingSystem());
 
