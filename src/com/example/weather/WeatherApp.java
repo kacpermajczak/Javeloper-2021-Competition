@@ -35,15 +35,15 @@ public class WeatherApp {
 final class WeatherController {
     private final WeatherLogger weatherLogger;
     private final MailProvider mailProvider;
+    private WeatherProvider weatherProvider;
 
-    public WeatherController(WeatherLogger weatherLogger, MailProvider mailProvider) {
+    public WeatherController(WeatherLogger weatherLogger, MailProvider mailProvider, WeatherProvider weatherProvider) {
         this.weatherLogger = weatherLogger;
         this.mailProvider = mailProvider;
+        this.weatherProvider = weatherProvider;
     }
 
     public void execute(String[] locations) {
-        WeatherProvider provider = new WeatherProvider();
-
         Random random = new Random();
         int randomNumber = random.ints(0, locations.length)
                 .findFirst()
@@ -53,7 +53,7 @@ final class WeatherController {
 
         weatherLogger.log(location);
 
-        Weather weather = provider.getWeatherFrom(location);
+        Weather weather = weatherProvider.getWeatherFrom(location);
 
         mailProvider.sendMail(weather);
 
