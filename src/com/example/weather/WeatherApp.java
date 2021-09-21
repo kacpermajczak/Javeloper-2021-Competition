@@ -17,27 +17,44 @@ public class WeatherApp {
         Random random = new Random();
 
         Runnable task = () -> {
-            WeatherProviderUtilsCommonHelper provider = new WeatherProviderUtilsCommonHelper();
+            WeatherController weatherController = new WeatherController(new WeatherLogger());
 
-            String location = locations[random.nextInt()];
-
-            log(location);
-
-            Weather weather = provider.checkWeatherAndSendMailWithTemperature(location);
-
-            log(weather);
+            weatherController.execute(locations);
         };
 
         for (int i = 0; i < locations.length * 20 ; i++) {
             new Thread(task).join();
         }
     }
+}
 
-    private static void log(Object object) {
+final class WeatherController {
+    private WeatherLogger weatherLogger;
+
+    public WeatherController(WeatherLogger weatherLogger) {
+        this.weatherLogger = weatherLogger;
+    }
+
+    public void execute(String[] locations) {
+        WeatherProviderUtilsCommonHelper provider = new WeatherProviderUtilsCommonHelper();
+
+        Random random = new Random();
+        String location = locations[random.nextInt()];
+
+        weatherLogger.log(location);
+
+        Weather weather = provider.checkWeatherAndSendMailWithTemperature(location);
+
+        weatherLogger.log(weather);
+    }
+}
+
+final class WeatherLogger {
+    public void log(Object object) {
         System.out.println("Weather=" + object.toString());
     }
 
-    private static void log(String text) {
+    public void log(String text) {
         System.out.println("Weather=" + text);
     }
 }
