@@ -8,6 +8,12 @@ interface WeatherConnector {
 interface MailProvider {
     void sendMail(final String location, final String weatherDatum, final String datum);
 }
+
+interface WeatherLogger {
+    void log(Object object);
+    void log(String text);
+}
+
 public class WeatherApp {
 
     static final String[] locations = new String[]{"Cracow", "Warsaw", "London", "Lodz", "Kielce", "Tokyo", "NewYork", "Buenos Aires", "Rzeszow"};
@@ -17,7 +23,7 @@ public class WeatherApp {
         Random random = new Random();
 
         Runnable task = () -> {
-            WeatherController weatherController = new WeatherController(new WeatherLogger());
+            WeatherController weatherController = new WeatherController(new WeatherLoggerUsingSystem());
 
             weatherController.execute(locations);
         };
@@ -29,7 +35,7 @@ public class WeatherApp {
 }
 
 final class WeatherController {
-    private WeatherLogger weatherLogger;
+    private final WeatherLogger weatherLogger;
 
     public WeatherController(WeatherLogger weatherLogger) {
         this.weatherLogger = weatherLogger;
@@ -49,7 +55,7 @@ final class WeatherController {
     }
 }
 
-final class WeatherLogger {
+final class WeatherLoggerUsingSystem implements WeatherLogger {
     public void log(Object object) {
         System.out.println("Weather=" + object.toString());
     }
